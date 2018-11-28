@@ -1,6 +1,9 @@
 from random import randint
-class Guardian(object):
+import pygame
+from pygame.sprite import Sprite
+class Guardian(Sprite):
     def __init__(self):
+        super(Guardian, self).__init__()
         self.x = 256
         self.y = 512
         self.speed = 20
@@ -8,6 +11,10 @@ class Guardian(object):
         self.should_move_left = False
         self.should_move_right = False
         self.should_move_up = False
+        self.rect = pygame.Rect(0,0,60,60)
+        self.rect.centerx = self.x
+        self.rect.centery = self.y
+        self.gem_count = 0
     def shouldMove(self, direction, start = True):
         if direction == "right":
             self.should_move_right = start
@@ -30,4 +37,6 @@ class Guardian(object):
         elif self.should_move_up:
             # if self.y >= (60):
             self.y -= self.speed
+        self.rect.left = self.x
+        self.rect.top = self.y
     

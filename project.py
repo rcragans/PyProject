@@ -3,12 +3,13 @@ pygame.init()
 from pygame.sprite import Group
 from pygame.sprite import groupcollide
 from Guardian import Guardian
-guardian = Guardian()
 from Monster import Monster
-monster = Monster()
 monsters = Group()
 from Bullets import Bullets
+from Gems import Gems
 bullets = Group()
+gems = Group()
+guardians = Group()
 screen_size = (512,1024)
 pygame_screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('Space Shooter')
@@ -31,12 +32,19 @@ gridmap = [
 {"map" : pygame.image.load('bottom_background.png'), "monster" : (monster3_image)},
 {"map" : "", "monster" : ""},
 {"map" : "", "monster" : ""}] 
+guardian = Guardian()
+guardians.add(guardian)
 game_on = True
 curr_map = 4
 curr_mon = 4
 tick = 0
+gem_image = pygame.image.load('diamond5.png')
 while game_on:
     tick += 1
+    if tick % 90 == 0:
+        monsters.add(Monster(gridmap[curr_mon]['monster']))
+    if tick % 30 == 0:
+        gems.add(Gems(gem_image))
     guardian.draw_me(512, 1024)
     if (guardian.y > -1 and guardian.y < 1025):
         pass
@@ -73,14 +81,27 @@ while game_on:
                 guardian.shouldMove("up",False)
             elif event.key == 274:
                 guardian.shouldMove("down",False)      
-        for bullet in bullets:
-            bullet.update_me()
-            pygame_screen.blit(pygame.transform.rotate(bullet.img,90),[bullet.x, bullet.y])
-        bullet_hit = groupcollide(bullets, monsters, True, True)
-        if bullet_hit:
-            monsters.add(Monster())
-    monster.move_me(guardian)
-    pygame_screen.blit(gridmap[curr_mon]['monster'], [monster.x, monster.y])
+    for bullet in bullets:
+        bullet.update_me()
+        pygame_screen.blit(pygame.transform.rotate(bullet.img,90),[bullet.x, bullet.y])
+    bullet_hit = groupcollide(bullets, monsters, True, True)
+    if bullet_hit:
+        pass
+        # monsters.add(Monster(gridmap[curr_mon]['monster']))
+    get_gem = groupcollide(guardians, gems, False, True) 
+    print (get_gem)
+    if get_gem:
+        guardian.gem_count += 1
+        print (guardian.gem_count)  
+    for monster in monsters:
+        pygame_screen.blit(monster.image, [monster.x, monster.y])
+        monster.move_me(guardian)
+    for gem in gems:
+        pygame_screen.blit(gem_image, [gem.rect.x, gem.rect.y])
+        print (guardian.rect.x)
+        print (guardian.rect.y)
+        print ('========')
+
     pygame_screen.blit(guardian_image,[guardian.x, guardian.y])
     
     pygame.display.flip()
