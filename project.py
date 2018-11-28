@@ -14,21 +14,41 @@ pygame_screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('Space Shooter')
 guardian_image = pygame.image.load('ship3.png')
 guardian_image = pygame.transform.scale(guardian_image, (60,60))
-background = [[pygame.image.load('middle_background.png'), pygame.image.load('monster1.png')], [pygame.image.load('top_background.png'), pygame.image.load('monster2.png')],[pygame.image.load('bottom_background.png'), pygame.image.load('monster3.png')]] 
-map_x = guardian.x
-map_y = guardian.y
+monster1_image = pygame.image.load('monster1.png')
+monster1_image = pygame.transform.scale(monster1_image, (60,60))
+monster2_image = pygame.image.load('monster2.png')
+monster2_image = pygame.transform.scale(monster2_image, (60,60))
+monster3_image = pygame.image.load('monster3.png')
+monster3_image = pygame.transform.scale(monster3_image, (60,60))
+gridmap = [
+{"map" : "", "monster" : ""},
+{"map" : pygame.image.load('top_background.png'), "monster" : (monster2_image)},
+{"map" : "", "monster" : ""},
+{"map" : "", "monster" : ""},
+{"map" : pygame.image.load('middle_background.png'), "monster" : (monster1_image)},
+{"map" : "", "monster" : ""},
+{"map" : "", "monster" : ""},
+{"map" : pygame.image.load('bottom_background.png'), "monster" : (monster3_image)},
+{"map" : "", "monster" : ""},
+{"map" : "", "monster" : ""}] 
 game_on = True
+curr_map = 4
+curr_mon = 4
+tick = 0
 while game_on:
+    tick += 1
     guardian.draw_me(512, 1024)
     if (guardian.y > -1 and guardian.y < 1025):
-        pygame_screen.blit((background[0][0]), (0,0))
-        map_y = guardian.y
+        pass
     if guardian.y > 1024:
-        pygame_screen.blit((background[2][0]), (0,0))
-        map_y = guardian.y -1024
+        curr_map += 3
+        guardian.y = 1
+        curr_mon += 3
     if guardian.y < 0:
-        pygame_screen.blit((background[1][0]), (0,0))
-        map_y = guardian.y +1024
+        curr_map -= 3
+        guardian.y = 1000
+        curr_mon -= 3
+    pygame_screen.blit((gridmap[curr_map]['map']), (0,0)) 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_on = False
@@ -52,9 +72,15 @@ while game_on:
             if event.key == 273:
                 guardian.shouldMove("up",False)
             elif event.key == 274:
-                guardian.shouldMove("down",False)
+                guardian.shouldMove("down",False)      
         for bullet in bullets:
             bullet.update_me()
-            pygame_screen.blit('spr_bullet_strip02.png',[bullet.x, bullet.y])
+            pygame_screen.blit(pygame.transform.rotate(bullet.img,90),[bullet.x, bullet.y])
+        bullet_hit = groupcollide(bullets, monsters, True, True)
+        if bullet_hit:
+            monsters.add(Monster())
+    monster.move_me(guardian)
+    pygame_screen.blit(gridmap[curr_mon]['monster'], [monster.x, monster.y])
     pygame_screen.blit(guardian_image,[guardian.x, guardian.y])
+    
     pygame.display.flip()

@@ -3,7 +3,7 @@ class Guardian(object):
     def __init__(self):
         self.x = 256
         self.y = 512
-        self.speed = 50
+        self.speed = 20
         self.should_move_down = False
         self.should_move_left = False
         self.should_move_right = False
@@ -19,10 +19,10 @@ class Guardian(object):
             self.should_move_down = start
     def draw_me(self,w,h):
         if self.should_move_right:
-            if self.x <= (w - 60):
+            if self.x <= (w - 75):
                 self.x += self.speed
         elif self.should_move_left:
-            if self.x >= (20):
+            if self.x >= (10):
                 self.x -= self.speed
         if self.should_move_down:
             # if self.y <= (h - 60):

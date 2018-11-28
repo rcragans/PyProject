@@ -6,7 +6,7 @@ class Monster(object):
     def __init__(self):
         self.x = randint(1,512)
         self.y = randint(1,480)
-        self.speed = 1
+        self.speed = 5
         self.rect = pygame.Rect(0,0,32,32)
         self.rect.centerx = self.x
         self.rect.centery = self.y
