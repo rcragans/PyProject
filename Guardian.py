@@ -30,5 +30,4 @@ class Guardian(object):
         elif self.should_move_up:
             # if self.y >= (60):
             self.y -= self.speed
-    def map_xy(self):
-        print ("X : %d, Y : %d") % (self.x, self.y)
+    

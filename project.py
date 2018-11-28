@@ -20,14 +20,16 @@ map_y = guardian.y
 game_on = True
 while game_on:
     guardian.draw_me(512, 1024)
-    
-    if map_y > -1 and map_y < 1025:
+    if (guardian.y > -1 and guardian.y < 1025):
         pygame_screen.blit((background[0][0]), (0,0))
-    elif map_y > 1024:
+        map_y = guardian.y
+    if guardian.y > 1024:
         pygame_screen.blit((background[2][0]), (0,0))
-    elif map_y < 0:
+        map_y = guardian.y -1024
+    if guardian.y < 0:
         pygame_screen.blit((background[1][0]), (0,0))
-        guardian.map_xy
+        guardian.y = guardian.y + 1024
+        map_y = guardian.y +1024
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_on = False
@@ -52,5 +54,8 @@ while game_on:
                 guardian.shouldMove("up",False)
             elif event.key == 274:
                 guardian.shouldMove("down",False)
+        for bullet in bullets:
+            bullet.update_me()
+            pygame_screen.blit('spr_bullet_strip02.png',[bullet.x, bullet.y])
     pygame_screen.blit(guardian_image,[guardian.x, guardian.y])
     pygame.display.flip()
