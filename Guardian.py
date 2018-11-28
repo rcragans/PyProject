@@ -15,6 +15,7 @@ class Guardian(Sprite):
         self.rect.centerx = self.x
         self.rect.centery = self.y
         self.gem_count = 0
+        self.kills = 0
     def shouldMove(self, direction, start = True):
         if direction == "right":
             self.should_move_right = start

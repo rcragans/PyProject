@@ -39,11 +39,12 @@ curr_map = 4
 curr_mon = 4
 tick = 0
 gem_image = pygame.image.load('diamond5.png')
+game_start = False
 while game_on:
     tick += 1
     if tick % 90 == 0:
         monsters.add(Monster(gridmap[curr_mon]['monster']))
-    if tick % 30 == 0:
+    if tick % 450 == 0:
         gems.add(Gems(gem_image))
     guardian.draw_me(512, 1024)
     if (guardian.y > -1 and guardian.y < 1025):
@@ -86,22 +87,17 @@ while game_on:
         pygame_screen.blit(pygame.transform.rotate(bullet.img,90),[bullet.x, bullet.y])
     bullet_hit = groupcollide(bullets, monsters, True, True)
     if bullet_hit:
-        pass
+        guardian.kills += 1
         # monsters.add(Monster(gridmap[curr_mon]['monster']))
     get_gem = groupcollide(guardians, gems, False, True) 
-    print (get_gem)
     if get_gem:
-        guardian.gem_count += 1
-        print (guardian.gem_count)  
+        guardian.gem_count += 1 
     for monster in monsters:
         pygame_screen.blit(monster.image, [monster.x, monster.y])
         monster.move_me(guardian)
     for gem in gems:
         pygame_screen.blit(gem_image, [gem.rect.x, gem.rect.y])
-        print (guardian.rect.x)
-        print (guardian.rect.y)
-        print ('========')
-
+        # if guardian.gem_count % 5 == 0:
+        #     monster.speed += 1
     pygame_screen.blit(guardian_image,[guardian.x, guardian.y])
-    
     pygame.display.flip()
