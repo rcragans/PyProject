@@ -28,7 +28,6 @@ while game_on:
         map_y = guardian.y -1024
     if guardian.y < 0:
         pygame_screen.blit((background[1][0]), (0,0))
-        guardian.y = guardian.y + 1024
         map_y = guardian.y +1024
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
