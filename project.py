@@ -73,6 +73,8 @@ while game_on:
             elif event.key == 32:
                 new_bullet = Bullets(guardian)
                 bullets.add(new_bullet)
+                # laser_sound = pygame.mixer.Sound('laser_sound.wav')
+                # laser_sound.play()
         elif event.type == pygame.KEYUP:
             if event.key == 275:
                 guardian.shouldMove("right",False)
@@ -88,7 +90,6 @@ while game_on:
     bullet_hit = groupcollide(bullets, monsters, True, True)
     if bullet_hit:
         guardian.kills += 1
-        # monsters.add(Monster(gridmap[curr_mon]['monster']))
     get_gem = groupcollide(guardians, gems, False, True) 
     if get_gem:
         guardian.gem_count += 1 
